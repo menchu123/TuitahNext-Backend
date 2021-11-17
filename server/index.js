@@ -3,6 +3,10 @@ const cors = require("cors");
 const debug = require("debug")("tuitah:server");
 const chalk = require("chalk");
 const morgan = require("morgan");
+const {
+  notFoundErrorHandler,
+  generalErrorHandler,
+} = require("./middlewares/errors");
 
 const app = express();
 

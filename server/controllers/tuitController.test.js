@@ -1,10 +1,10 @@
 require("dotenv").config();
 const Tuit = require("../../database/models/tuit");
-const { getTuit, createTuit } = require("./tuitController");
+const { getTuits, createTuit } = require("./tuitController");
 
 jest.mock("../../database/models/tuit");
 
-describe("Given a getTuit function", () => {
+describe("Given a getTuits function", () => {
   describe("When receives a method get", () => {
     test("It should invoke method json with array of tuits", async () => {
       const tuit = [{}, {}];
@@ -13,7 +13,7 @@ describe("Given a getTuit function", () => {
       };
       Tuit.find = jest.fn().mockResolvedValue(tuit);
 
-      await getTuit(null, res);
+      await getTuits(null, res);
 
       expect(res.json).toHaveBeenCalledWith(tuit);
     });
@@ -28,7 +28,7 @@ describe("Given a getTuit function", () => {
 
       Tuit.find = jest.fn().mockRejectedValue(error);
 
-      await getTuit(null, res, next);
+      await getTuits(null, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
     });

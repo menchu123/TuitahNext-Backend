@@ -25,4 +25,7 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 
+app.use(notFoundErrorHandler);
+app.use(generalErrorHandler);
+
 module.exports = { initializeServer, app };

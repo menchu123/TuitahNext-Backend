@@ -3,6 +3,7 @@ const cors = require("cors");
 const debug = require("debug")("tuitah:server");
 const chalk = require("chalk");
 const morgan = require("morgan");
+const tuitRoutes = require("./routes/tuitRoutes");
 
 const app = express();
 
@@ -24,6 +25,8 @@ const initializeServer = (port) =>
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
+
+app.use("/tuit", tuitRoutes);
 
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);

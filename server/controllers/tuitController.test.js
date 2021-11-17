@@ -1,6 +1,6 @@
 require("dotenv").config();
 const Tuit = require("../../database/models/tuit");
-const { getTuits, createTuit } = require("./tuitController");
+const { getTuits, createTuit, deleteTuit } = require("./tuitController");
 
 jest.mock("../../database/models/tuit");
 
@@ -77,6 +77,65 @@ describe("Given a createTuit function", () => {
       await createTuit(req, res);
 
       expect(res.json).toHaveBeenCalledWith(req.body);
+    });
+  });
+});
+
+describe("Given a deleteTuit function", () => {
+  describe("When it receives a request with an id 1, a response and a next function", () => {
+    test("Then it should call the Tuit.findByIdAndDelete with a 1", async () => {
+      const idTuit = 1;
+      const req = {
+        params: {
+          idTuit,
+        },
+      };
+      const res = {
+        json: () => {},
+      };
+      const next = () => {};
+      Tuit.findByIdAndDelete = jest.fn().mockResolvedValue({});
+
+      await deleteTuit(req, res, next);
+      expect(Tuit.findByIdAndDelete).toHaveBeenCalledWith(idTuit);
+    });
+  });
+
+  describe("And Tuit.findByIdAndDelete rejects", () => {
+    test("Then it should call next with an error", async () => {
+      const error = {};
+      Tuit.findByIdAndDelete = jest.fn().mockRejectedValue(error);
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {};
+      const next = jest.fn();
+
+      await deleteTuit(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(error).toHaveProperty("code");
+      expect(error.code).toBe(400);
+    });
+  });
+
+  describe("And Tuit.findByIdAndDelete returns undefined", () => {
+    test("Then it should call next with an error", async () => {
+      const error = new Error("Tuit not found");
+      Tuit.findByIdAndDelete = jest.fn().mockResolvedValue(undefined);
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {};
+      const next = jest.fn();
+
+      await deleteTuit(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 });

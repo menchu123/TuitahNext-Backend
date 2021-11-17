@@ -1,4 +1,4 @@
-const debug = require("debug")("db");
+const debug = require("debug")("tuitah:database");
 const chalk = require("chalk");
 const mongoose = require("mongoose");
 
@@ -15,7 +15,7 @@ const connectDB = (stringConnection) =>
       resolve();
     });
     mongoose.connection.on("close", () => {
-      debug(chalk.green("Desconectado de la base de datos"));
+      debug(chalk.green("Connexion to database OVER"));
     });
   });
 

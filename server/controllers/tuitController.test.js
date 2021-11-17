@@ -1,6 +1,6 @@
 require("dotenv").config();
 const Tuit = require("../../database/models/tuit");
-const getTuit = require("./tuitController");
+const { getTuit } = require("./tuitController");
 
 describe("Given a getTuit function", () => {
   describe("When receives a method get", () => {

@@ -9,4 +9,18 @@ const getTuit = async (req, res, next) => {
   }
 };
 
-module.exports = getTuit;
+const createTuit = async (req, res, next) => {
+  const { text } = req.body;
+  try {
+    const newTuit = await Tuit.create({
+      text,
+    });
+    res.json(newTuit);
+  } catch {
+    const error = new Error("Something error tuit!!!");
+    error.code = 400;
+    next(error);
+  }
+};
+
+module.exports = { getTuit, createTuit };

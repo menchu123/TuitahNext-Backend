@@ -1,3 +1,4 @@
+const debug = require("debug")("tuitah:tuitController");
 const Tuit = require("../../database/models/tuit");
 
 const getTuit = async (req, res, next) => {
@@ -10,11 +11,8 @@ const getTuit = async (req, res, next) => {
 };
 
 const createTuit = async (req, res, next) => {
-  const { text } = req.body;
   try {
-    const newTuit = await Tuit.create({
-      text,
-    });
+    const newTuit = await Tuit.create(req.body);
     res.json(newTuit);
   } catch {
     const error = new Error("Something error tuit!!!");

@@ -1,6 +1,11 @@
 require("dotenv").config();
 const Tuit = require("../../database/models/tuit");
-const { getTuits, createTuit, deleteTuit } = require("./tuitController");
+const {
+  getTuits,
+  createTuit,
+  deleteTuit,
+  addLike,
+} = require("./tuitController");
 
 jest.mock("../../database/models/tuit");
 
@@ -134,6 +139,45 @@ describe("Given a deleteTuit function", () => {
       const next = jest.fn();
 
       await deleteTuit(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a addLike function", () => {
+  describe("When it receives a request to a url with an existing id", () => {
+    test("Then it should call Tuit.findbyId with the existing id", async () => {
+      const idTuit = 1;
+      const req = {
+        params: {
+          idTuit,
+        },
+      };
+      const res = {
+        json: jest.fn(),
+      };
+      const next = () => {};
+      Tuit.findById = jest.fn().mockResolvedValue({});
+
+      await addLike(req, res, next);
+      expect(Tuit.findById).toHaveBeenCalledWith(idTuit);
+    });
+  });
+
+  describe("And Tuit.findbyId returns null", () => {
+    test("Then it should call next with an error", async () => {
+      const error = new Error("Tuit don t existing");
+      Tuit.findById = jest.fn().mockResolvedValue(null);
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {};
+      const next = jest.fn();
+
+      await addLike(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
     });

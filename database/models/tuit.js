@@ -4,6 +4,8 @@ const tuitSchema = new Schema({
   text: {
     type: String,
     required: true,
+    minlength: 1,
+    maxlength: 200,
   },
   likes: {
     type: Number,

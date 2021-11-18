@@ -39,4 +39,18 @@ const deleteTuit = async (req, res, next) => {
   }
 };
 
-module.exports = { getTuits, createTuit, deleteTuit };
+const addLike = async (req, res, next) => {
+  const { idTuit } = req.params;
+  try {
+    const tuit = await Tuit.findById(idTuit);
+    tuit.likes += 1;
+    await tuit.save();
+    res.json(tuit.likes);
+  } catch (error) {
+    error.message = "Tuit don t existing";
+    error.code = 400;
+    next(error);
+  }
+};
+
+module.exports = { getTuits, createTuit, deleteTuit, addLike };
